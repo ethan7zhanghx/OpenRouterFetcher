@@ -38,11 +38,17 @@ def get_current_quarter_range():
 
 
 def get_current_week_range():
-    """获取当周的开始和结束日期（周一到周日）"""
+    """获取当周的开始和结束日期（上周五到这周五）"""
     today = datetime.now()
-    week_start = today - timedelta(days=today.weekday())
+    
+    # 计算本周五
+    days_until_friday = (4 - today.weekday()) % 7  # 4 = Friday
+    week_end = today + timedelta(days=days_until_friday)
+    week_end = week_end.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
+    # 上周五是本周五的前7天
+    week_start = week_end - timedelta(days=7)
     week_start = week_start.replace(hour=0, minute=0, second=0, microsecond=0)
-    week_end = week_start + timedelta(days=6)
 
     return week_start, week_end
 
